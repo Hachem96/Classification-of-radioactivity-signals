@@ -21,6 +21,19 @@ from keras.layers import LeakyReLU
 from Common_Function import alignment_Pulses,read_file,Qtail_Qtots,save_data,sampling_reduce,equivalentEnergy
 from Data_preparation import separate_signals,idx_Noise,idx_pileup,ListAppend,CreatePathAndSave
 
+def prepare_training_validaton_data(path_neutron,path_gamma,baseline,PulseDuration,MaxStartPoint=False,TriggerPercentage=0.1)
+    gamma = read_file(path_gamma)
+    neutron = read_file(path_neutron)
+    X = np.concatenate((neutron,gamma))
+    X = alignment_Pulses(X,baseline,PulseDuration,MaxStartPoint,TriggerPercentage)
+    #X = sampling_reduce(X,f_out,5)
+    y = np.zeros(X.shape[0])
+    y[0:neutron.shape[0]] = 1
+    width = X.shape[1]
+    X = X[:,0:width]
+    X_train,X_val,y_train,y_val = train_test_split(X,y, test_size=0.2, shuffle=True,random_state=42,stratify=y)
+    return X_train,X_val,y_train,y_val
+
 def network(X_train,y_train,X_test,y_test,path,train=False):
     weightNeutron = sum(y_train)/(len(y_train) - sum(y_train))
     class_weight= {0:weightNeutron, 1:1-weightNeutron}
