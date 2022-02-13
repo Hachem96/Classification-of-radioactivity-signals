@@ -4,3 +4,9 @@ This repository is the code of proposed novel strategy to prepare clean labeled 
 generalization validates the labels provided by the labeling strategy. The obtained accuracy, False Positive Rate (FPR) and True Positive Rate (TPR) are respectively
 equal to 97%, 1.5%, and 92%.
 
+[prepare-ToFSetup-dataset.py](https://github.com/Hachem96/Classification-of-radioactivity-signals/blob/master/prepare-ToFSetup-dataset.py): main function should be called in this script in order to execute the code and prepared the datasets acquired by ToF setup. The input of the main is the path of the dataset, number of files, decay and rise time of the detector, width of the gaussian kernel used to detect the pile-up events and the ratio of rejection (&beta). The output files of the function are signals and pile-up events acquired by first and second detectors. These files are written in the same directory as the input data.
+
+[prepare-standartSetup-dataset.py] (https://github.com/Hachem96/Classification-of-radioactivity-signals/blob/master/prepare-standartSetup-dataset.py): main function prepare the datasets acquired by a standart setup experiment. The input of the main is the path of the dataset, number of files, decay and rise time of the detector, width of the gaussian kernel used to detect the pile-up event. The output files are signals and pile-up events acquired by the detector. These files are written in the same directory as the input data.
+
+[ML-Model.py] (https://github.com/Hachem96/Classification-of-radioactivity-signals/blob/master/ML-Model.py): contains functions to prepare the training and validation datasets, train a multlayer perception model and visualize the training results 
+
