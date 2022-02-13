@@ -21,11 +21,11 @@ from keras.layers import LeakyReLU
 from Common_Function import alignment_Pulses,read_file,Qtail_Qtots,save_data,sampling_reduce,equivalentEnergy
 from Data_preparation import separate_signals,idx_Noise,idx_pileup,ListAppend,CreatePathAndSave
 
-def prepare_training_validaton_data(path_neutron,path_gamma,baseline,PulseDuration,MaxStartPoint=False,TriggerPercentage=0.1)
+def prepare_training_validaton_data(path_neutron,path_gamma,AlignmentParameters)
     gamma = read_file(path_gamma)
     neutron = read_file(path_neutron)
     X = np.concatenate((neutron,gamma))
-    X = alignment_Pulses(X,baseline,PulseDuration,MaxStartPoint,TriggerPercentage)
+    X = alignment_Pulses(X,AlignmentParameters)
     #X = sampling_reduce(X,f_out,5)
     y = np.zeros(X.shape[0])
     y[0:neutron.shape[0]] = 1
