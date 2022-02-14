@@ -15,20 +15,20 @@ def save_data(data,path,separator=','):
     data_frame.to_csv(path,sep=separator,header=False,index=False)
     return
 	
-def alignment_Pulses(Pulses,baseline,PulseDuration,MaxStartPoint=False,TriggerPercentage=0.1):
-    rise_time = riseTime(Pulses,TriggerPercentage)
+def alignment_Pulses(Pulses,AlignmentParameters):
+    rise_time = riseTime(Pulses,AlignmentParameters['TriggerPercentage'])
     #print(rise_time)
-    new_Pulses = np.zeros((Pulses.shape[0],PulseDuration))
+    new_Pulses = np.zeros((Pulses.shape[0],AlignmentParameters['PulseDuration']))
     for i in range(0,Pulses.shape[0]):
-        StartPoint = get_start_point(Pulses[i,:],TriggerPercentage,int(2*rise_time))
-        if(MaxStartPoint == True):
+        StartPoint = get_start_point(Pulses[i,:],AlignmentParameters['TriggerPercentage'],int(2*rise_time))
+        if(AlignmentParameters['MaxStartPoint'] == True):
             tmax = np.argmax(Pulses[i,:])
         else:
             tmax = StartPoint #tmax - rise_time
         temp = Pulses[i,tmax:tmax + PulseDuration] if(tmax<PulseDuration) else Pulses[i,tmax:]
-        if baseline>0:
-            if (StartPoint >= baseline):
-                temp = temp - np.mean(Pulses[i,StartPoint-baseline:StartPoint])
+        if AlignmentParameters['baseline']>0:
+            if (StartPoint >=  AlignmentParameters['baseline']):
+                temp = temp - np.mean(Pulses[i,StartPoint- AlignmentParameters['baseline']:StartPoint])
             else:
                 if StartPoint>0:
                     temp = temp - np.mean(Pulses[i,0:StartPoint])
